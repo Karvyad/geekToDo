@@ -1,25 +1,45 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import UsersList from './components/User';
+import axios from "axios";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      'users': []
+    };
+  }
+
+  componentDidMount() {
+    // const users = [
+    //   {
+    //     "first_name": "Лох",
+    //     "last_name": "Терпилыч",
+    //     "email": "loxx@mail",
+    //     "username": "LOxx"
+    //   }
+    // ];
+
+    axios.get('http://127.0.0.1:8000/api/users/').then(response => {
+      this.setState(
+        {
+          'users': response.data
+        }
+      );
+    }).catch(error => { console.log('connection failed');} );
+
+    
+  }
+
+  render () {
+    return (
+      <div>
+        <UsersList users={this.state.users} />
+      </div>
+    );
+  }
 }
 
 export default App;
